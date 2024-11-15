@@ -1,0 +1,6 @@
+[package]
+name = "server-side"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies] # TODO: Meter dependencias SQLx y Actix y Serde y blablabla
