@@ -6,7 +6,6 @@ edition = "2021"
 [dependencies]
 sqlx = { version = "0.8.2", features = ["runtime-tokio", "mysql", "macros", "derive"] }
 tokio = { version = "1.41.1", features = ["full"] }
-# serde = { version = "1.0.209", features = ["derive"] } Not needed I think
 
 [dev-dependencies]
 dotenvy = { version = "0.15.7" }

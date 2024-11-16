@@ -1,10 +1,12 @@
+pub mod entities;
+
+use std::env;
 #[cfg(test)]
 use dotenvy::dotenv;
 use sqlx::mysql::MySqlPoolOptions;
-use sqlx::{Error, MySqlPool};
-use std::env;
+use sqlx::MySqlPool;
 
-pub async fn init_db_pool() -> Result<MySqlPool, Error> {
+pub async fn init_db_pool() -> Result<MySqlPool, sqlx::Error> {
     #[cfg(test)]
     {
         dotenv().ok();
