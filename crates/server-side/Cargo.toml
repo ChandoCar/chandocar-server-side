@@ -9,4 +9,7 @@ tokio = { version = "1.41.1", features = ["full"] }
 serde = { version = "1.0.215", features = ["derive"] }
 serde_json = "1.0.132"
 dotenvy = "0.15.7"
+
+### Local dependencies
 database-access = { path = "../database-access" }
+account-login = { path = "../account-login" }
