@@ -26,8 +26,8 @@ async fn main() {
 
     let database_pool = database_access::init_db_pool()
         .await
-        .expect("Should create database pool");
-
+        .expect("Database pool couldn't be created");
+    
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(database_pool.clone()))
