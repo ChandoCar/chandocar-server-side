@@ -1,10 +1,12 @@
 use actix_web::{web, App, HttpServer};
 use dotenvy::dotenv;
 
+mod config;
 mod controllers;
+mod validation;
+
 #[cfg(test)]
 mod test_utils;
-mod validation;
 
 const ADDRS: (&str, u16) = {
     #[cfg(debug_assertions)]
@@ -21,13 +23,14 @@ const ADDRS: (&str, u16) = {
 #[tokio::main]
 async fn main() {
     dotenv().ok();
+    config::config();
 
     check_for_env_vars();
 
     let database_pool = database_access::init_db_pool()
         .await
         .expect("Database pool couldn't be created");
-    
+
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(database_pool.clone()))
