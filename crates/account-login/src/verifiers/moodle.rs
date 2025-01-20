@@ -38,7 +38,7 @@ async fn moodle_login<'m>(
 
     let mut endpoint = reqwest::Url::parse(url).expect("Error parsing the moodle url");
 
-    let mut request = reqwest::Request::new(reqwest::Method::POST, endpoint);
+    let mut request = reqwest::Request::new(reqwest::Method::POST, endpoint.clone());
 
     let body_string = format!(
         "anchor=&logintoken={}&username={}&password={}",
@@ -130,13 +130,56 @@ mod tests {
 
     #[tokio::test]
     async fn test_moodle_login() {
-        assert!(!moodle_login(MOODLE_LOGIN_URL, "bcaxtr", "ñaksdfhñakjhs")
-            .await
-            .unwrap()
-        );
-        assert!(!moodle_login(MOODLE_LOGIN_URL, "bcastextrsdf", "po8yhpñoiuhñ")
+        todo!("Set a valid user");
+        assert!(
+            moodle_login(MOODLE_LOGIN_URL, "", "")
                 .await
                 .unwrap()
         );
+        assert!(
+            !moodle_login(MOODLE_LOGIN_URL, "bcastextrsdf", "po8yhpñoiuhñ")
+                .await
+                .unwrap()
+        );
+    }
+
+    #[tokio::test]
+    async fn stress_moodle_login() {
+        let mut threads = Vec::new();
+
+        for _ in 0..50 {
+            let handle = tokio::spawn(async {
+                let response = moodle_login(MOODLE_LOGIN_URL, "pepito", "adsuigflasjd").await;
+
+                if let Ok(result) = response {
+                    println!("Result: {}. Expected: false", result);
+                    assert!(!result);
+                } else { 
+                    println!("Error: {:?}", response);
+                    assert!(false);
+                }
+            });
+
+            threads.push(handle);
+
+            let handle = tokio::spawn(async {
+                todo!("Set a valid user");
+                let response = moodle_login(MOODLE_LOGIN_URL, "", "").await;
+
+                if let Ok(result) = response {
+                    println!("Result: {}. Expected: true", result);
+                    assert!(result);
+                } else {
+                    println!("Error: {:?}", response);
+                    assert!(false);
+                }
+            });
+
+            threads.push(handle);
+        }
+
+        for handle in threads {
+            handle.await.unwrap();
+        }
     }
 }
